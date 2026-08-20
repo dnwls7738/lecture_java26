@@ -21,6 +21,7 @@ public class Swap {
 			b = temp;		// 비어있는 b 변수에 temp 값 할당
 			
 			System.out.print( "Swapping 결과 " + "a = "+ a + ","+ "b = " + b);
+			sc.close();
 		}
 	}
 
