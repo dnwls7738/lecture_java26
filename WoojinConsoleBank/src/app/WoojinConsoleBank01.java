@@ -3,13 +3,15 @@ package app;
 import java.util.Scanner;
 
 import account.Account;
+import account.AccountDao;
+import account.AccountFileDao;
 import account.AccountMemDao;
 
 public class WoojinConsoleBank01 {
 
 	static String[] startMenu = { "0.종료", "1.계좌등록", "2.계좌조회", "3.입금", "4.출금" };
 	static Scanner sc = new Scanner(System.in);
-	static AccountMemDao accountDao = new AccountMemDao();
+	static AccountDao accountDao = new AccountMemDao();
 
 	public static void main(String[] args) {
 		welcomMessage();

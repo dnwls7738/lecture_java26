@@ -1,6 +1,6 @@
 package account;
 
-public class AccountMemDao {
+public class AccountMemDao implements AccountDao{
 	public static int noSeq = 111111;
 	public static Account[] accountDB = new Account[100];
 	private int numAccount;
@@ -47,4 +47,17 @@ public class AccountMemDao {
 		}
 		return false;
 	}
+
+	@Override
+	public Account selectByNo(int accountNO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Account[] selectByOwner(String owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
