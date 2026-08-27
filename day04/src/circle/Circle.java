@@ -1,24 +1,16 @@
 package circle;
 
-public class Circle {
-	public static double PI = 3.14;
-	private double radius;
-	
+public class Circle extends CircleTemplate{
 
 	public Circle(double radius) {
-		this.radius = radius;
+		super(radius);
 	}
+	
 	
 	public double getArea() {
-		return PI * radius * radius;
-	}
-	
-	public double getRadius() {
-		return radius;
-	}
-	
-	public void setRadius() {
+		return 0;
 		
 	}
+	
 
 }
