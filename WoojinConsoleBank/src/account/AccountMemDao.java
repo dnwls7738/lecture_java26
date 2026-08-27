@@ -25,18 +25,21 @@ public class AccountMemDao implements AccountDao{
 	}
 	
 	//입금
-	public boolean deposit(int accountNo, int amount) {
+	public boolean deposit(int accountNo, int amount) throws NoAccountException {
 		for (int i =0; i < numAccount; i++) {
 			if(accountNo == accountDB[i].getNo()) {
+				//입금 처리
 				accountDB[i].setBalance(accountDB[i].getBalance() + amount);
 				return true;
 			}
 		}
-		return false;
+		// 없는 계좌번호 -> 예외 객체 생성하여 던짐
+		throw new NoAccountException(accountNo);
+		
 	}
 	
 	//출금
-	public boolean withdraw(int accountNo, int amount) {
+	public boolean withdraw(int accountNo, int amount) throws NoAccountException {
 		for (int i = 0; i < numAccount; i++) {
 			if(accountNo == accountDB[i].getNo()) {
 				accountDB[i].setBalance(accountDB[i].getBalance() - amount);
@@ -45,7 +48,7 @@ public class AccountMemDao implements AccountDao{
 				return false;
 			}
 		}
-		return false;
+		throw new NoAccountException(accountNo);
 	}
 
 	@Override
