@@ -6,13 +6,12 @@ import java.util.List;
 
 public class AccountListDao implements AccountDao{
 
-	public static int noSeq = 111111;
+
 	public List<Account> accountDB = new ArrayList<Account>();
 	
 	@Override
-	public boolean createAccount(String owner, String password, int balance) {
-		int no = noSeq++;
-		accountDB.add(new Account(no, owner, password, balance));
+	public boolean createAccount(Account ac) {
+		accountDB.add(ac);
 		return true;
 	}
 

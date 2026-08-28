@@ -20,8 +20,6 @@ public class Account {
 	public String toString() {
 		return "[no=" + no + ", owner=" + owner + ", password=" + password + ", balance=" + balance + "]";
 	}
-
-
 	public String getPassword() {
 		return password;
 	}
