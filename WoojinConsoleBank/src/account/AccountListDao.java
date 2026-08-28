@@ -55,28 +55,17 @@ public class AccountListDao implements AccountDao{
 	}
 
 	@Override
-	public boolean deposit(int accountNo, int amount) throws NoAccountException {
-		Account ac = selectByNo(accountNo);
-		if(ac != null) {
-			ac.setBalance(ac.getBalance() - amount);
-			return true;
-		}
-
-		// 없는 계좌번호 -> 예외 객체 생성하여 던짐
-		throw new NoAccountException(accountNo);
+	public boolean updateAccount(Account ac) {
+		Account orgAccount = selectByNo(ac.getNo());
+		accountDB.set(accountDB.indexOf(orgAccount),ac);
+		return true;
 	}
 
 	@Override
-	public boolean withdraw(int accountNo, int amount) throws NoAccountException {
-		Account ac = selectByNo(accountNo);
-		if(ac != null) {
-			ac.setBalance(ac.getBalance() + amount);
-			return true;
-		}
-
-		// 없는 계좌번호 -> 예외 객체 생성하여 던짐
-		throw new NoAccountException(accountNo);
-	
+	public boolean deleteAccount(int accountNo) {
+		// TODO Auto-generated method stub
+		return false;
 	}
+
 
 }

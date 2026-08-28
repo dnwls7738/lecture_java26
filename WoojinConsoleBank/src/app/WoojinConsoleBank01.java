@@ -48,6 +48,20 @@ public class WoojinConsoleBank01 {
 		}
 
 	}
+	
+	
+	private static void menuAccountList() {
+		System.out.println("[계좌 조회]");
+		showAccountList(aservice.getAllAcounts());
+
+	}
+
+	private static void showAccountList(List<Account> accountList) {
+		for (int i = 0; i < accountList.size(); i++) {
+			System.out.println(accountList.get(i));
+		}
+	}
+	
 
 	private static void menuAccountRegist() {
 		// 계좌주 이름, 비밀번호, 초기 입금액
@@ -67,18 +81,6 @@ public class WoojinConsoleBank01 {
 			System.out.println("계좌를 등록할 수 없습니다.");
 		}
 
-	}
-
-	private static void menuAccountList() {
-		System.out.println("[계좌 조회]");
-		showAccountList(aservice.getAllAcounts());
-
-	}
-	
-	private static void showAccountList(List<Account> accountList) {
-		for (int i = 0; i < accountList.size(); i++) {
-			System.out.println(accountList.get(i));
-		}
 	}
 
 	private static void menuDeposit() {
@@ -101,28 +103,25 @@ public class WoojinConsoleBank01 {
 		}
 	}
 
-
-
 	private static void menuWithDraw() {
 		System.out.println("[출금]");
 		showAccountList(aservice.getAllAcounts());
 		// 계좌번호, 출금액 입력
 		System.out.print("계좌번호 : ");
-		int accountNo = sc.nextInt();
+		int accountNo = Integer.parseInt(sc.nextLine());
 		System.out.print("출금액 : ");
-		int amount = sc.nextInt();
+		int amount = Integer.parseInt(sc.nextLine());
+		System.out.print("계좌비밀번호 : ");
+		String password = sc.nextLine();
 		sc.nextLine();
 
 		// Dao에게 출금 요청
 		try {
-		
-				aservice.withdraw(accountNo, amount, password);
-				System.out.println("출금하였습니다.");
-			} catch (NoAccountException e) {
-				System.out.println("출금할 수 없습니다."+ e.getMessage());
+			aservice.withdraw(accountNo, amount, password);
+			System.out.println("출금하였습니다.");
+		} catch (Exception e) {
+			System.out.println("출금할 수 없습니다." + e.getMessage());
 		}
-	
-			
 
 	}
 

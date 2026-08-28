@@ -10,6 +10,6 @@ public interface AccountDao {
 	Account selectByNo(int accountNo);
 	List<Account> selectByOwner(String owner);
 	//입금, 출금
-	boolean deposit(int accoutNo, int amount) throws NoAccountException;
-	boolean withdraw(int accoutNo, int amount) throws NoAccountException;
+	boolean updateAccount(Account ac);
+	boolean deleteAccount(int accountNo);
 }
