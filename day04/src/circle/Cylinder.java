@@ -1,6 +1,6 @@
 package circle;
 
-public class Cylinder extends CircleTemplate{
+public class Cylinder extends Circle{
 	
 	private double height;
 	
@@ -21,6 +21,6 @@ public class Cylinder extends CircleTemplate{
 	
 	@Override
 	public double getArea() {
-		return 2* PI * getRadius() * getRadius()+(2*PI*getRadius()*height);
+		return (2* PI * getRadius() * getRadius())+(2*PI*getRadius()*getHeight());
 	}
 }

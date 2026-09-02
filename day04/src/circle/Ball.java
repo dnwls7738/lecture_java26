@@ -1,11 +1,14 @@
 package circle;
 
+import circle.Circle;
 
-public class Ball extends CircleTemplate {
+public class Ball extends Circle {
 	
 	public Ball(double radius) {
 		super(radius);
+
 	}
+
 
 	@Override
 	public double getArea() {

@@ -1,6 +1,6 @@
 package account;
 
-public class AccountMemDao implements AccountDao{
+public class AccountMemDao {
 	public static int noSeq = 111111;
 	public static Account[] accountDB = new Account[100];
 	private int numAccount;
@@ -25,21 +25,18 @@ public class AccountMemDao implements AccountDao{
 	}
 	
 	//입금
-	public boolean deposit(int accountNo, int amount) throws NoAccountException {
+	public boolean deposit(int accountNo, int amount) {
 		for (int i =0; i < numAccount; i++) {
 			if(accountNo == accountDB[i].getNo()) {
-				//입금 처리
 				accountDB[i].setBalance(accountDB[i].getBalance() + amount);
 				return true;
 			}
 		}
-		// 없는 계좌번호 -> 예외 객체 생성하여 던짐
-		throw new NoAccountException(accountNo);
-		
+		return false;
 	}
 	
 	//출금
-	public boolean withdraw(int accountNo, int amount) throws NoAccountException {
+	public boolean withdraw(int accountNo, int amount) {
 		for (int i = 0; i < numAccount; i++) {
 			if(accountNo == accountDB[i].getNo()) {
 				accountDB[i].setBalance(accountDB[i].getBalance() - amount);
@@ -48,19 +45,6 @@ public class AccountMemDao implements AccountDao{
 				return false;
 			}
 		}
-		throw new NoAccountException(accountNo);
+		return false;
 	}
-
-	@Override
-	public Account selectByNo(int accountNO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Account[] selectByOwner(String owner) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

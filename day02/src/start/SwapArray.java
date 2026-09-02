@@ -1,5 +1,7 @@
 package start;
 
+import java.util.Arrays;
+
 public class SwapArray {
 
 	static int[] swapArray(int[] numList) {

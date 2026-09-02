@@ -1,159 +1,264 @@
 package app;
 
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
-import account.Account;
-import account.AccountDao;
-import account.AccountFileDao;
 import account.AccountListDao;
 import account.AccountService;
-import account.NoAccountException;
+import member.Member;
+import member.MemberMapDao;
+import member.MemberService;
 
 public class WoojinConsoleBank01 {
+	
+	Scanner sc = new Scanner(System.in);
+	AccountService as;
+	MemberService ms;
+	
+	String[] startMenu = {"종료", "로그인", "회원가입"};
+	String[] adminMenu = {"로그아웃", "회원관리", "계좌관리"};
+	String[] bankingMenu = {"로그아웃", "계좌목록", "입금", "출금", "계좌생성", "계좌해지", "내정보"};
+	String[] myinfoMenu = {"돌아가기", "비밀번호수정", "회원탈퇴"};
+	String[] adminMemberMenu = {"돌아가기", "회원목록", "회원강퇴"};
+	String[] adminAccountMenu = {"돌아가기", "전체계좌목록", "회원별계좌목록"};
 
-	static String[] startMenu = { "0.종료", "1.계좌등록", "2.계좌조회", "3.입금", "4.출금" };
-	static Scanner sc = new Scanner(System.in);
-	static AccountService aservice = new AccountService(new AccountListDao());
-
+	public WoojinConsoleBank01(AccountService as, MemberService ms) {
+		this.as = as;
+		this.ms = ms;
+	}
+	
 	public static void main(String[] args) {
-		welcomMessage();
-		bankMenu();
-		goodbyeMessage();
-
+		AccountService as = new AccountService(new AccountListDao());
+		MemberService ms = new MemberService(new MemberMapDao());
+		WoojinConsoleBank01 consoleBank = new WoojinConsoleBank01(as, ms);
+		
+		consoleBank.welcomeMessage();
+		consoleBank.runStartMenu();
+		consoleBank.sayGoodbye();
+		
+	}
+	
+	private void welcomeMessage() {
+		System.out.println("+------------------------------------+");
+		System.out.println("  Welcome to woojin's Console Bank ");
+		System.out.println("+------------------------------------+");
+		
 	}
 
-	private static void bankMenu() {
+	private void sayGoodbye() {
+		System.out.println(">> Hyejeong's Console Bank를 이용해 주셔서 감사합니다.");
+		
+	}
+	
+	private void runStartMenu() {
+		
 		while (true) {
-			int menu = getMenu(startMenu);
+			System.out.println("[[ 시작 메뉴 ]]");
+			int menu = selectMenu(startMenu);
 			switch (menu) {
 			case 1:
-				menuAccountRegist();
-				break;
+				menuLogin(); break;
 			case 2:
-				menuAccountList();
-				break;
-			case 3:
-				menuDeposit();
-				break;
-			case 4:
-				menuWithDraw();
-				break;
+				menuJoin(); break;
 			case 0:
 				return;
 			default:
-				System.out.println("없는 메뉴입니다.");
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
 			}
 		}
-
+		
 	}
 	
-	
-	private static void menuAccountList() {
-		System.out.println("[계좌 조회]");
-		showAccountList(aservice.getAllAcounts());
-
+	private int selectMenu(String[] menuList) {
+		System.out.println("==========================");
+		for (int i = 1; i < menuList.length; i++)
+			System.out.println(" " + i + ". " + menuList[i]);
+		System.out.println(" 0. " + menuList[0]);
+		System.out.println("==========================");
+		System.out.print(">> 선택 : ");
+		int menu = Integer.parseInt(sc.nextLine());
+		return menu;
 	}
 
-	private static void showAccountList(List<Account> accountList) {
-		for (int i = 0; i < accountList.size(); i++) {
-			System.out.println(accountList.get(i));
-		}
-	}
-	
-
-	private static void menuAccountRegist() {
-		// 계좌주 이름, 비밀번호, 초기 입금액
-		System.out.println("[계좌 등록]");
-		System.out.print("계좌주 :");
-		String owner = sc.nextLine();
-		System.out.print("비밀번호 :");
+	private void menuLogin() {
+		System.out.println("[[ 로그인 ]]");
+		System.out.print(">> 아이디 : ");
+		String id = sc.nextLine();
+		System.out.print(">> 비밀번호 : ");
 		String password = sc.nextLine();
-		System.out.print("초기 입금액 :");
-
-		int amount = sc.nextInt();
-		sc.nextLine();
-
-		if (aservice.createAccount(owner, password, amount)) {
-			System.out.println("계좌를 등록했습니다.");
+		
+		// 로그인 처리 후 로그인한 멤버 유형에 맞는 메뉴 실행
+		if (ms.login(id, password)) {
+			Member m = ms.getLoginMember();
+			if (m.getId().equals(ms.getAdminId()))
+				runAdminMenu();
+			else {
+				runBankingMenu();
+			}
 		} else {
-			System.out.println("계좌를 등록할 수 없습니다.");
+			System.out.println(">> 로그인 할 수 없습니다.");
 		}
-
+		
 	}
 
-	private static void menuDeposit() {
-		System.out.println("[입금]");
-		showAccountList(aservice.getAllAcounts());
-		// 계좌번호, 입금액 입력
-		System.out.print("계좌번호 : ");
-		int accountNo = sc.nextInt();
-		System.out.print("입금액 : ");
-		int amount = sc.nextInt();
-		sc.nextLine();
+	private void menuJoin() {
+		// TODO Auto-generated method stub
+		
+	}
 
-		// service에게 입금 요청
-		try {
-			aservice.deposit(accountNo, amount);
-			System.out.println("입금하였습니다.");
-		} catch (Exception e) {
-			System.out.println("입금할 수 없습니다. :" + e.getMessage());
+	private void runAdminMenu() {
 
+		while (true) {
+			System.out.println("[[ 관리자 메뉴 ]]");
+			int menu = selectMenu(adminMenu);
+			switch (menu) {
+			case 1: // 회원관리
+				runAdminMemberMenu(); break;
+			case 2: // 계좌관리
+				runAdminAccountMenu(); break;
+			case 0:
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+			}
 		}
+		
 	}
 
-	private static void menuWithDraw() {
-		System.out.println("[출금]");
-		showAccountList(aservice.getAllAcounts());
-		// 계좌번호, 출금액 입력
-		System.out.print("계좌번호 : ");
-		int accountNo = Integer.parseInt(sc.nextLine());
-		System.out.print("출금액 : ");
-		int amount = Integer.parseInt(sc.nextLine());
-		System.out.print("계좌비밀번호 : ");
-		String password = sc.nextLine();
-		sc.nextLine();
-
-		// Dao에게 출금 요청
-		try {
-			aservice.withdraw(accountNo, amount, password);
-			System.out.println("출금하였습니다.");
-		} catch (Exception e) {
-			System.out.println("출금할 수 없습니다." + e.getMessage());
+	private void runAdminMemberMenu() {
+		while (true) {
+			System.out.println("[[ 관리자용 회원관리 ]]");
+			int menu = selectMenu(adminMemberMenu);
+			switch (menu) {
+			case 1: // 회원 목록
+				menuAdminListMembers(); break;
+			case 2: // 회원 강퇴
+				menuAdminDeleteMember(); break;
+			case 0:
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+			}
 		}
-
+		
 	}
 
-	private static int getMenu(String[] menuList) {
-		System.out.println("======================");
-		// 메뉴 출력
-		for (int i = 1; i < menuList.length; i++) {
-			System.out.println(menuList[i]);
+	private void menuAdminListMembers() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void menuAdminDeleteMember() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void runAdminAccountMenu() {
+		while (true) {
+			System.out.println("[[ 관리자용 계좌관리 ]]");
+			int menu = selectMenu(adminAccountMenu);
+			switch (menu) {
+			case 1: // 전체 계좌 목록
+				menuAdminListAllAccounts(); break;
+			case 2: // 회원 계좌 목록
+				menuAdminListMemberAccounts(); break;
+			case 0:
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+			}
 		}
-		System.out.println(menuList[0]);
-		System.out.println("======================");
+		
+	}
 
-		// 메뉴 선택
-		System.out.print(">> 메뉴 선택 : ");
 
-		try {
-			int menuNum = Integer.parseInt(sc.nextLine());
+	private void menuAdminListAllAccounts() {
+		// TODO Auto-generated method stub
+		
+	}
 
-			return menuNum;
-		} catch (Exception e) {
-			return -1;
+	private void menuAdminListMemberAccounts() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void runBankingMenu() {
+		while (true) {
+			System.out.println("[[ 은행 메뉴 ]]");
+			int menu = selectMenu(bankingMenu);
+			switch (menu) {
+			case 1: // 내 계좌 목록
+				menuListMyAccounts(); break;
+			case 2: // 입금
+				menuDeposit(); break;
+			case 3: // 출금
+				menuWithdraw(); break;
+			case 4 : // 계좌생성
+				menuCreateAccount(); break;
+			case 5: // 계좌해지
+				menuDeleteAccount(); break;
+			case 6: // 내 정보
+				runMyinfoMenu(); break;
+			case 0:
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+			}
 		}
-
+		
 	}
 
-	private static void welcomMessage() {
-		System.out.println("Welcom Console Bank");
+	private void menuListMyAccounts() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	private static void goodbyeMessage() {
-		System.out.println("Good Bye Console Bank");
-
+	private void menuDeposit() {
+		// TODO Auto-generated method stub
+		
 	}
+
+	private void menuWithdraw() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void menuCreateAccount() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void menuDeleteAccount() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void runMyinfoMenu() {
+		while (true) {
+			System.out.println("[[ 내 정보 메뉴 ]]");
+			int menu = selectMenu(myinfoMenu);
+			switch (menu) {
+			case 1: // 비밀번호 수정
+				menuUpdatePassword(); break;
+			case 2: // 회원 탈퇴
+				menuDeleteMembership(); break;
+			case 0:
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+			}
+		}
+		
+	}
+
+	private void menuUpdatePassword() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void menuDeleteMembership() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

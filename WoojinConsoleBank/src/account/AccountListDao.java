@@ -1,7 +1,6 @@
 package account;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class AccountListDao implements AccountDao{
@@ -45,10 +44,10 @@ public class AccountListDao implements AccountDao{
 	}
 
 	@Override
-	public List<Account> selectByOwner(String owner) {
+	public List<Account> selectByMemberId(String memeberId) {
 		List<Account> accountList = new ArrayList<Account>();
 		for (Account ac : accountDB) {
-			if(ac.getOwner().equals(owner))
+			if(ac.getMemberId().equals(memeberId))
 				accountList.add(ac);
 		}
 		return accountList;

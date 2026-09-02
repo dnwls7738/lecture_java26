@@ -12,8 +12,8 @@ public class AccountService {
 	}
 	
 	
-	public boolean createAccount(String owner, String password, int amount) {
-		Account ac = new Account(noSeq++, owner,password, amount);
+	public boolean createAccount(String memeberId, String password, int amount) {
+		Account ac = new Account(noSeq++, memeberId,password, amount);
 		return accountDao.createAccount(ac);		
 	}
 	
